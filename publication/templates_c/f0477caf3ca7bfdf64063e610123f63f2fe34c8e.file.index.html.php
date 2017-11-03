@@ -1,4 +1,31 @@
-<!DOCTYPE html><!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="es-CO"> <![endif]-->
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2017-11-03 10:20:17
+         compiled from ".\templates\index.html" */ ?>
+<?php /*%%SmartyHeaderCode:3011059fc6dc2a281d3-90936518%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+$_valid = $_smarty_tpl->decodeProperties(array (
+  'file_dependency' => 
+  array (
+    'f0477caf3ca7bfdf64063e610123f63f2fe34c8e' => 
+    array (
+      0 => '.\\templates\\index.html',
+      1 => 1509722413,
+      2 => 'file',
+    ),
+  ),
+  'nocache_hash' => '3011059fc6dc2a281d3-90936518',
+  'function' => 
+  array (
+  ),
+  'version' => 'Smarty-3.1.21-dev',
+  'unifunc' => 'content_59fc6dc2a55f73_32212708',
+  'variables' => 
+  array (
+    'departamento' => 0,
+    'departamentos' => 0,
+    'facebook' => 0,
+  ),
+  'has_nocache_code' => false,
+),false); /*/%%SmartyHeaderCode%%*/?>
+<?php if ($_valid && !is_callable('content_59fc6dc2a55f73_32212708')) {function content_59fc6dc2a55f73_32212708($_smarty_tpl) {?><!DOCTYPE html><!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="es-CO"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang="es-CO"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9" lang="es-CO"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="es-CO"> <!--<![endif]-->
@@ -10,9 +37,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/landing-gv.min.css">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,900" rel="stylesheet"><!--[if lt IE]>
-<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<?php echo '<script'; ?>
+ src="//html5shiv.googlecode.com/svn/trunk/html5.js"><?php echo '</script'; ?>
+>
 <![endif]-->
-  <script src="js/libs/modernizr-2.6.2.min.js"></script>
+  <?php echo '<script'; ?>
+ src="js/libs/modernizr-2.6.2.min.js"><?php echo '</script'; ?>
+>
 </head>
 <body>
   <!--Header-->
@@ -176,33 +207,38 @@
         <div class="form-group">
           <label for="nombre">
             Nombre<sup>*</sup></label>
-          <input type="text" id="nombre" name="nombre">
+          <input type="text" id="nombre" name="nombre" class="estilo">
         </div>
         <!--/-Nombre-->
         <!--Apellidos-->
         <div class="form-group">
           <label for="apellidos">
             Apellidos<sup>*</sup></label>
-          <input type="text" id="apellidos" name="apellidos">
+          <input type="text" id="apellidos" name="apellidos" class="estilo">
         </div>
         <!--/-Apellidos-->
         <!--Municipio-->
         <div class="form-group form-select">
-          <label for="departamento">
-            Municipio<sup>*</sup></label>
           <select name="departamento" id="departamento">
-            <option value="">Seleccione</option>
-
+          	<option value="">Departamento</option>
+            <?php  $_smarty_tpl->tpl_vars['departamentos'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['departamentos']->_loop = false;
+ $_from = $_smarty_tpl->tpl_vars['departamento']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+foreach ($_from as $_smarty_tpl->tpl_vars['departamentos']->key => $_smarty_tpl->tpl_vars['departamentos']->value) {
+$_smarty_tpl->tpl_vars['departamentos']->_loop = true;
+?>
+                <option value="<?php echo $_smarty_tpl->tpl_vars['departamentos']->value->idDepto;?>
+">
+            <?php echo $_smarty_tpl->tpl_vars['departamentos']->value->nombre;?>
+  
+                </option>
+            <?php } ?>
           </select>
         </div>
         <!--/-Municipio-->
         <!--Ciudad-->
         <div class="form-group form-select">
-          <label for="ciudad">
-            Ciudad<sup>*</sup></label>
           <select name="ciudad" id="ciudad">
-            <option value=""></option>
-
+            <option value="">Ciudad</option>
           </select>
         </div>
         <!--/-Ciudad-->
@@ -210,20 +246,21 @@
         <div class="form-group">
           <label for="telefono">
             Teléfono</sup></label>
-          <input type="number" min="0" id="telefono" name="telefono">
+          <input type="number" min="0" id="telefono" name="telefono" class="estilo">
         </div>
         <!--/-Telefono-->
         <!--email-->
         <div class="form-group">
           <label for="email">
             e-mail<sup>*</sup></label>
-          <input type="email" id="email" name="email">
+          <input type="email" id="email" name="email" class="estilo">
         </div>
         <!--/-email-->
         <!--Acepto terminos-->
         <div class="form-group form-checkbox">
+        	<input type="checkbox" name="politicas" id="politicas">
           <div class="checkbox">
-            <input type="checkbox" name="politicas" id="politicas"><br>
+            
             <label for="politicas">He leído y acepto los <a href="files/politicas.pdf" target="_blank">términos y condiciones</a> y <a href="files/politicas.pdf" target="_blank">Política de privacidad </a>establecidos en el aviso legal. </label>
           </div>
         </div>
@@ -232,7 +269,8 @@
       <div class="clearfix"></div>
       <div class="col-button">
         <!--Facebook Connect-->
-        <button class="btn btn-fb" type="button">Conéctate con Facebook</button>
+        <button class="btn btn-fb" type="button" onClick="window.location = '<?php echo $_smarty_tpl->tpl_vars['facebook']->value;?>
+';">Conéctate con Facebook</button>
         <!--/-Facebook Connect-->
         <!--Twitter Connect-->
         <button class="btn btn-tw" type="button">Conéctate con  Twitter</button>
@@ -253,7 +291,13 @@
   </footer>
   <!--/-Footer-->
   <!--Scripts-->
-  <script src="js/libs/jquery.js"></script>
-  <script src="js/libs.min.js"></script>
-  <script src="js/gv.validate.js"></script>
-</body></html>
+  <?php echo '<script'; ?>
+ src="js/libs/jquery.js"><?php echo '</script'; ?>
+>
+  <?php echo '<script'; ?>
+ src="js/libs.min.js"><?php echo '</script'; ?>
+>
+  <?php echo '<script'; ?>
+ src="js/gv.validate.js"><?php echo '</script'; ?>
+>
+</body></html><?php }} ?>

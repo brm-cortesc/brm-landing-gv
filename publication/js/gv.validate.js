@@ -1,1 +1,156 @@
-"use strict";var $select=jQuery(".form-group select"),$input=jQuery(".form-group input"),$form=jQuery("#trabajo"),$btnSubmit=jQuery("#trabajo .btn-submit"),$cal=jQuery("#trabajo"),campoActive=function(e){jQuery(e).focusin(function(){jQuery(this).parent().addClass("active")}).focusout(function(){var e=jQuery(this);""!=jQuery(e).val()?jQuery(e).parent().addClass("active"):jQuery(e).parent().removeClass("active")})};jQuery(document).ready(function(){campoActive($input),$select.change(function(){var e=jQuery(this);""!=jQuery(this).val()?jQuery(e).parent().addClass("active"):jQuery(e).parent().removeClass("active")}),jQuery.validator.addMethod("letras",function(e,r){return this.optional(r)||/^[a-z" "ñÑáéíóúÁÉÍÓÚ,.;]+$/i.test(e)});var e=function(e,r){e.insertAfter(r.parent())};$form.validate({errorElement:"div",errorClass:"msn-place",rules:{nombre:{required:!0,letras:!0},apellidos:{required:!0,letras:!0},municipio:{required:!0},ciudad:{required:!0},telefono:{required:!0,digits:!0,minlength:9,maxlength:10},email:{required:!0,email:!0},politicas:{required:!0}},messages:{nombre:{required:"Indicanos tu nombre",letras:"Solo ingresa letras"},apellidos:{required:"Indicanos tus apellidos",letras:"Solo ingresa letras"},municipio:{required:"debes ingresar el lugar"},ciudad:{required:"debes ingresar una ciudad"},telefono:{required:"Indicanos un tel&eacute;fono de contacto",digits:"Solo ingresa n&uacute;meros",minlength:"N&uacute;mero no v&aacute;lido",maxlength:"N&uacute;mero no v&aacute;lido"},email:{required:"Indicanos un email",email:"Formato de email inv&aacute;lido"},politicas:{required:"Debes aceptar el aviso de privacidad"}},errorPlacement:e})});
+const $select    = jQuery('.form-group select');
+const $input     = jQuery('.form-group input.estilo');
+const $form      = jQuery('#trabajo');
+const $btnSubmit = jQuery('#trabajo .btn-submit');
+const $cal       = jQuery('#trabajo');
+
+//Estado activo de los campos//
+const campoActive = (el) =>{
+
+	jQuery(el)
+		.focusin(function() {
+			jQuery(this).parent().addClass('active')
+		
+		})
+		.focusout(function() {
+
+			let $self = jQuery(this);
+
+			if (jQuery($self).val() != '' ){
+				jQuery($self).parent().addClass('active')
+
+			}else{
+				jQuery($self).parent().removeClass('active')
+
+			}
+		});
+
+};
+
+
+jQuery(document).ready( ()=>{
+
+	//inputs activos
+	campoActive($input);
+
+	//Selects activos
+
+	$select.change(function () {
+		let $self = jQuery(this);
+
+		if(jQuery(this).val() != ''){
+			jQuery($self)
+			.parent().addClass('active')
+		}else{
+			jQuery($self)
+			.parent().removeClass('active')
+
+		}
+	});
+
+
+	//metodo para aceptar texto con espacios y caracteres especiales
+
+	jQuery.validator.addMethod('letras', function(val, el){
+		return this.optional(el) || /^[a-z" "ñÑáéíóúÁÉÍÓÚ,.;]+$/i.test(val);
+	});
+
+	jQuery.validator.addMethod("email", function(a, e) {
+        return this.optional(e)||/^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/.test(a)
+    });
+
+
+	//Ubicacion de mensaje de error//
+	const errorPlacement = (error, element)=>{
+		error.insertAfter(element.parent())
+	};
+
+	$form.validate({
+		// debug: true,
+
+		errorElement: 'div',
+		errorClass: 'msn-place',
+
+		rules: {
+
+		  nombre: 			{required:true,letras:true},
+		  apellidos: 		{required:true,letras:true },
+		  departamento: 		{ required:true },
+		  ciudad: 			{ required:true  },
+		  telefono: 		{ digits:true, minlength:7, maxlength:10 },
+		  email: 			{required:true,	email:true},
+		  politicas: 		{ required:true  }
+
+		},
+
+
+		messages: {
+		  nombre:{
+		  	required:'Indicanos tu nombre',
+		  	letras: 'Solo ingresa letras'
+		  },
+		  apellidos:{
+		  	required:'Indicanos tus apellidos',
+		  	letras: 'Solo ingresa letras'
+		  },
+		  departamento:{
+		  	required:'Debes ingresar el departamento'
+		  },
+		  ciudad:{
+		  	required:'debes ingresar una ciudad'
+		  },
+		  telefono:{
+		  	digits:'Solo ingresa n&uacute;meros',
+		  	minlength: 'N&uacute;mero no v&aacute;lido',
+		  	maxlength: 'N&uacute;mero no v&aacute;lido'
+		  },
+		  email:{
+		  	required: 'Indicanos un email' ,
+		  	email: 'Formato de email inv&aacute;lido'
+		  },
+		  politicas:{
+		  	required: 'Debes aceptar el aviso de privacidad'
+		  }
+
+		},
+        submitHandler: function(form){
+            var nombres = $("#nombre").val();
+            var apellidos = $("#apellidos").val();
+            var departamento = $("#departamento").val();
+            var ciudad = $("#ciudad").val();
+            var correo = $("#email").val();
+            var telefono = $("#telefono").val();
+            $.post("usuario.php", {nombres: nombres, apellidos: apellidos, departamento: departamento,ciudad: ciudad, 
+            correo: correo, telefono: telefono, accion: "insertar_usuario" }, function(data) {
+                if(data){
+                    alert("Correcto.");
+                }else{
+                    alert("ERROR.");
+                }
+            });
+        }
+
+	});
+
+
+	$("#departamento").change(function() {
+        $("#departamento option:selected").each(function() {
+            departamento = $(this).val();
+            $.post("usuario.php", {departamento: departamento, accion: "cargar_ciudad"}, function(data) {
+                var options = '';
+                var content = JSON.parse(data);
+                if(content == ''){
+                    options = '<option value="">Seleccione</option>';
+                }else{
+                    for (var i = 0; i < content.length; i++) {
+                        options += '<option value="' + content[i]['idCiudad'] + '">' + content[i]['nombre'] + '</option>';
+                    }
+                }
+                $("#ciudad").html(options);
+            });
+        });
+    });
+
+	
+/*No pasar de acá para el DOM ready*/
+});

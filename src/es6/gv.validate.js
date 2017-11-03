@@ -55,6 +55,10 @@ jQuery(document).ready( ()=>{
 		return this.optional(el) || /^[a-z" "ñÑáéíóúÁÉÍÓÚ,.;]+$/i.test(val);
 	});
 
+	jQuery.validator.addMethod("email", function(a, e) {
+        return this.optional(e)||/^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/.test(a)
+    });
+
 
 	//Ubicacion de mensaje de error//
 	const errorPlacement = (error, element)=>{
@@ -73,7 +77,7 @@ jQuery(document).ready( ()=>{
 		  apellidos: 		{required:true,letras:true },
 		  municipio: 		{ required:true },
 		  ciudad: 			{ required:true  },
-		  telefono: 		{required:true, digits:true, minlength:9, maxlength:10 },
+		  telefono: 		{ digits:true, minlength:9, maxlength:10 },
 		  email: 			{required:true,	email:true},
 		  politicas: 		{ required:true  }
 
@@ -96,7 +100,6 @@ jQuery(document).ready( ()=>{
 		  	required:'debes ingresar una ciudad'
 		  },
 		  telefono:{
-		  	required: 'Indicanos un tel&eacute;fono de contacto' ,
 		  	digits:'Solo ingresa n&uacute;meros',
 		  	minlength: 'N&uacute;mero no v&aacute;lido',
 		  	maxlength: 'N&uacute;mero no v&aacute;lido'
@@ -110,10 +113,43 @@ jQuery(document).ready( ()=>{
 		  }
 
 		},
-
-		errorPlacement
+        submitHandler: function(form){
+            var nombres = $("#nombres").val();
+            var apellidos = $("#apellidos").val();
+            var departamento = $("#departamento").val();
+            var ciudad = $("#ciudad").val();
+            var correo = $("#correo").val();
+            var telefono = $("#telefono").val();
+            $.post("usuario.php", {nombres: nombres, apellidos: apellidos, departamento: departamento,ciudad: ciudad, 
+            correo: correo, telefono: telefono, accion: "insertar_usuario" }, function(data) {
+                if(data){
+                    alert("Correcto.");
+                }else{
+                    alert("ERROR.");
+                }
+            });
+        }
 
 	});
+
+
+	$("#departamento").change(function() {
+        $("#departamento option:selected").each(function() {
+            departamento = $(this).val();
+            $.post("usuario.php", {departamento: departamento, accion: "cargar_ciudad"}, function(data) {
+                var options = '';
+                var content = JSON.parse(data);
+                if(content == ''){
+                    options = '<option value="">Seleccione</option>';
+                }else{
+                    for (var i = 0; i < content.length; i++) {
+                        options += '<option value="' + content[i]['idCiudad'] + '">' + content[i]['nombre'] + '</option>';
+                    }
+                }
+                $("#ciudad").html(options);
+            });
+        });
+    });
 
 	
 /*No pasar de acá para el DOM ready*/
